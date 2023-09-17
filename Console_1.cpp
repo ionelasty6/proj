@@ -1,27 +1,21 @@
 ﻿#include <iostream>
 #include <string>
-using namespace std;
 
+// Клас Address
 class Address {
 private:
     int index;
-    string country;
-    string city;
-    string street;
-    string house;
-    string apartment;
+    std::string country;
+    std::string city;
+    std::string street;
+    int house;
+    int apartment;
 
 public:
-    Address(int idx, const string& cntry, const string& cty, const string& st, const string& hse, const string& apt) {
-        index = idx;
-        country = cntry;
-        city = cty;
-        street = st;
-        house = hse;
-        apartment = apt;
-    }
+    Address(int idx, const std::string& c, const std::string& ct, const std::string& st, int h, int apt)
+        : index(idx), country(c), city(ct), street(st), house(h), apartment(apt) {}
 
-    int getIndex() {
+    int getIndex() const {
         return index;
     }
 
@@ -29,121 +23,181 @@ public:
         index = idx;
     }
 
-    string getCountry() {
+    const std::string& getCountry() const {
         return country;
     }
 
-    void setCountry(const string& cntry) {
-        country = cntry;
+    void setCountry(const std::string& c) {
+        country = c;
     }
 
-    string getCity() {
+    const std::string& getCity() const {
         return city;
     }
 
-    void setCity(const string& cty) {
-        city = cty;
+    void setCity(const std::string& ct) {
+        city = ct;
     }
 
-    string getStreet() {
+    const std::string& getStreet() const {
         return street;
     }
 
-    void setStreet(const string& st) {
+    void setStreet(const std::string& st) {
         street = st;
     }
 
-    string getHouse() {
+    int getHouse() const {
         return house;
     }
 
-    void setHouse(const string& hse) {
-        house = hse;
+    void setHouse(int h) {
+        house = h;
     }
 
-    string getApartment() {
+    int getApartment() const {
         return apartment;
     }
 
-    void setApartment(const string& apt) {
+    void setApartment(int apt) {
         apartment = apt;
     }
 };
 
+// Клас Converter
 class Converter {
 private:
-    double usdRate;
-    double eurRate;
-    double plnRate;
+    double usd;
+    double eur;
+    double pln;
 
 public:
-    Converter(double usd, double eur, double pln) {
-        usdRate = usd;
-        eurRate = eur;
-        plnRate = pln;
+    Converter(double usd, double eur, double pln)
+        : usd(usd), eur(eur), pln(pln) {}
+
+    double convertToCurrency(double amount, const std::string& currency) const {
+        if (currency == "USD")
+            return amount / usd;
+        else if (currency == "EUR")
+            return amount / eur;
+        else if (currency == "PLN")
+            return amount / pln;
+        else
+            return 0.0;
     }
 
-    double convertToCurrency(double amount, const string& currency) {
-        if (currency == "USD") {
-            return amount / usdRate;
-        }
-        else if (currency == "EUR") {
-            return amount / eurRate;
-        }
-        else if (currency == "PLN") {
-            return amount / plnRate;
-        }
-        else {
-            cout << "Непідтримувана валюта: " << currency << endl;
+    double convertFromCurrency(double amount, const std::string& currency) const {
+        if (currency == "USD")
+            return amount * usd;
+        else if (currency == "EUR")
+            return amount * eur;
+        else if (currency == "PLN")
+            return amount * pln;
+        else
             return 0.0;
+    }
+};
+
+// Клас Employee
+class Employee {
+private:
+    std::string lastName;
+    std::string firstName;
+    std::string position;
+    int experience;
+
+public:
+    Employee(const std::string& last, const std::string& first)
+        : lastName(last), firstName(first), position("Робітник"), experience(0) {}
+
+    void calculateSalary() {
+        double salary = 0.0;
+
+        if (position == "Менеджер") {
+            if (experience >= 5)
+                salary = 50000.0;
+            else
+                salary = 40000.0;
         }
+        else if (position == "Робітник") {
+            if (experience >= 10)
+                salary = 30000.0;
+            else
+                salary = 25000.0;
+        }
+
+        double tax = 0.1 * salary;
+
+        std::cout << "Прізвище: " << lastName << std::endl;
+        std::cout << "Ім'я: " << firstName << std::endl;
+        std::cout << "Посада: " << position << std::endl;
+        std::cout << "Оклад: " << salary << " грн" << std::endl;
+        std::cout << "Податковий збір: " << tax << " грн" << std::endl;
     }
 
-    double convertFromCurrency(double amount, const string& currency) {
-        if (currency == "USD") {
-            return amount * usdRate;
-        }
-        else if (currency == "EUR") {
-            return amount * eurRate;
-        }
-        else if (currency == "PLN") {
-            return amount * plnRate;
-        }
-        else {
-            cout << "Непідтримувана валюта: " << currency << endl;
-            return 0.0;
-        }
+    void setPositionAndExperience(const std::string& pos, int exp) {
+        position = pos;
+        experience = exp;
+    }
+};
+
+// Клас User
+class User {
+private:
+    std::string login;
+    std::string firstName;
+    std::string lastName;
+    int age;
+    const std::string registrationDate;
+
+public:
+    User(const std::string& lg, const std::string& first, const std::string& last, int a)
+        : login(lg), firstName(first), lastName(last), age(a), registrationDate(getCurrentDate()) {}
+
+    // Метод для отримання поточної дати (просто для прикладу)
+    std::string getCurrentDate() const {
+        // Реалізацію отримання поточної дати можна додати за потребою
+        return "2023-09-17";
+    }
+
+    void printUserInfo() const {
+        std::cout << "Логін: " << login << std::endl;
+        std::cout << "Ім'я: " << firstName << std::endl;
+        std::cout << "Прізвище: " << lastName << std::endl;
+        std::cout << "Вік: " << age << " років" << std::endl;
+        std::cout << "Дата реєстрації: " << registrationDate << std::endl;
     }
 };
 
 int main() {
-    // Створення екземпляру класу Address з встановленою адресою
-    Address myAddress(12345, "Україна", "Київ", "Головна вулиця", "10", "42");
+    // Приклад використання класів
 
-    // Виведення на екран значень полів, що описують адресу
-    cout << "Index: " << myAddress.getIndex() << endl;
-    cout << "Country: " << myAddress.getCountry() << endl;
-    cout << "City: " << myAddress.getCity() << endl;
-    cout << "Street: " << myAddress.getStreet() << endl;
-    cout << "House: " << myAddress.getHouse() << endl;
-    cout << "Apartment: " << myAddress.getApartment() << endl;
+    // Клас Address
+    Address address(12345, "Україна", "Київ", "Вулиця Прикладна", 42, 10);
+    std::cout << "Інформація про адресу:" << std::endl;
+    std::cout << "Індекс: " << address.getIndex() << std::endl;
+    std::cout << "Країна: " << address.getCountry() << std::endl;
+    std::cout << "Місто: " << address.getCity() << std::endl;
+    std::cout << "Вулиця: " << address.getStreet() << std::endl;
+    std::cout << "Будинок: " << address.getHouse() << std::endl;
+    std::cout << "Квартира: " << address.getApartment() << std::endl;
 
-    // Ініціалізуємо об'єкт класу Converter з курсами валют
-    Converter converter(36.5, 40.5, 8.5);
-
-    // Конвертація з гривні в інші валюти
+    // Клас Converter
+    Converter converter(26.5, 31.2, 6.7);
     double amountInUah = 1000.0;
-    cout << amountInUah << " грн = " << converter.convertToCurrency(amountInUah, "USD") << " USD" << endl;
-    cout << amountInUah << " грн = " << converter.convertToCurrency(amountInUah, "EUR") << " EUR" << endl;
-    cout << amountInUah << " грн = " << converter.convertToCurrency(amountInUah, "PLN") << " PLN" << endl;
+    double amountInUsd = converter.convertToCurrency(amountInUah, "USD");
+    std::cout << amountInUah << " UAH = " << amountInUsd << " USD" << std::endl;
+    double amountInUah2 = converter.convertFromCurrency(500.0, "USD");
+    std::cout << "500 USD = " << amountInUah2 << " UAH" << std::endl;
 
-    // Конвертація з інших валют в гривню
-    double amountInUsd = 100.0;
-    cout << amountInUsd << " USD = " << converter.convertFromCurrency(amountInUsd, "UAH") << " грн" << endl;
-    double amountInEur = 50.0;
-    cout << amountInEur << " EUR = " << converter.convertFromCurrency(amountInEur, "UAH") << " грн" << endl;
-    double amountInPln = 200.0;
-    cout << amountInPln << " PLN = " << converter.convertFromCurrency(amountInPln, "UAH") << " грн" << endl;
+    // Клас Employee
+    Employee employee("Петров", "Іван");
+    employee.setPositionAndExperience("Менеджер", 6);
+    employee.calculateSalary();
+
+    // Клас User
+    User user("user123", "Іван", "Петров", 30);
+    user.printUserInfo();
 
     return 0;
 }
